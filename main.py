@@ -20,21 +20,21 @@ tasks = [
 ]
 
 ###############################################################################
-@app.get("/")
+@app.get("/", summary="API information")
 async def root():
     return {"name": "Task API", "version": "1.0", "endpoints": ["/tasks"] }
 
-@app.get("/health")
+@app.get("/health",summary="Check API health")
 async def health():
     return {"status": "ok"}
 ###############################################################################
 
 ###############################################################################
-@app.get("/tasks")
+@app.get("/tasks", summary="Get all tasks")
 async def get_tasks():
     return tasks
 
-@app.get("/tasks/{id}")
+@app.get("/tasks/{id}", summary="Get task by ID")
 async def get_task_by_id(id: int):
     for task in tasks:
         if task["id"] == id:
@@ -43,7 +43,7 @@ async def get_task_by_id(id: int):
 
 ###############################################################################
 
-@app.post("/tasks", status_code=201)
+@app.post("/tasks", status_code=201, summary="Create a new task")
 async def create_task(req: Request):
 
     try:
@@ -78,7 +78,7 @@ async def create_task(req: Request):
 
 ###############################################################################
 
-@app.put("/tasks/{id}")
+@app.put("/tasks/{id}", summary="Update a task")
 async def update_task(id: int, req: Request):
 
     task = None
@@ -123,7 +123,7 @@ async def update_task(id: int, req: Request):
 
     from fastapi import Response
 
-@app.delete("/tasks/{id}", status_code=204)
+@app.delete("/tasks/{id}", status_code=204, summary="Delete a task")
 async def delete_task(id: int):
 
     for task in tasks:
