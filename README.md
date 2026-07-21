@@ -34,6 +34,14 @@ A simple CRUD REST API built with **FastAPI** for the FlyRank Backend Internship
 
 ---
 
+## Requirements
+
+- Python 3.10+
+- FastAPI
+- Uvicorn
+
+---
+
 ## Installation
 
 Clone the repository:
@@ -113,11 +121,8 @@ content-type: application/json
 
 # Swagger UI
 
-Insert your screenshot here.
 
-```markdown
 ![Swagger UI](images/Swagger.png)
-```
 
 ---
 
@@ -133,8 +138,9 @@ task-api/
 
 ---
 
-# Author
 
-Muhamad Assaad <3
+## Author
+
+**Muhamad Assaad**
 
 FlyRank Backend Internship Assignment
