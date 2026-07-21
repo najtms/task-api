@@ -19,7 +19,7 @@ tasks = [
     }
 ]
 
-
+###############################################################################
 @app.get("/")
 async def root():
     return {"name": "Task API", "version": "1.0", "endpoints": ["/tasks"] }
@@ -27,7 +27,9 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+###############################################################################
 
+###############################################################################
 @app.get("/tasks")
 async def get_tasks():
     return tasks
@@ -38,6 +40,8 @@ async def get_task_by_id(id: int):
         if task["id"] == id:
             return task
     return {"error": f"Task {id} not found"}
+
+###############################################################################
 
 @app.post("/tasks", status_code=201)
 async def create_task(req: Request):
@@ -71,3 +75,63 @@ async def create_task(req: Request):
     tasks.append(new_task)
 
     return new_task
+
+###############################################################################
+
+@app.put("/tasks/{id}")
+async def update_task(id: int, req: Request):
+
+    task = None
+    for t in tasks:
+        if t["id"] == id:
+            task = t
+            break
+
+    if task is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Task {id} not found"
+        )
+
+    try:
+        data = await req.json()
+    except:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid JSON"
+        )
+
+    if not data:
+        raise HTTPException(
+            status_code=400,
+            detail="Request body cannot be empty"
+        )
+
+    if "title" in data:
+        if data["title"].strip() == "":
+            raise HTTPException(
+                status_code=400,
+                detail="Title cannot be empty"
+            )
+        task["title"] = data["title"]
+
+    if "done" in data:
+        task["done"] = data["done"]
+
+    return task
+
+
+    from fastapi import Response
+
+@app.delete("/tasks/{id}", status_code=204)
+async def delete_task(id: int):
+
+    for task in tasks:
+        if task["id"] == id:
+            tasks.remove(task)
+            return Response(status_code=204)
+
+    raise HTTPException(
+        status_code=404,
+        detail=f"Task {id} not found"
+    )
